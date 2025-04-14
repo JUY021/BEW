@@ -1,5 +1,7 @@
 package com.dongyang.wooyeong01.dto;
 
+import com.dongyang.wooyeong01.entity.Article;
+
 public class ArticleForm {
     private String title;
     private String content;
@@ -18,6 +20,10 @@ public class ArticleForm {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Article toEntity() {
+        return new Article(null, title, content);
     }
 
     @Override
