@@ -1,0 +1,21 @@
+{{>layouts/header}}
+
+<h1>
+    상세 글 보기
+</h1>
+{{#article}}
+    <form class="container">
+        <div class="mb-3">
+            <label for="title" class="form-label">제목 (아이디 : {{id}}) </label>
+            <input type="text" class="form-control" id="title" name="title" value="{{title}}" readonly>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">내용</label>
+            <textarea class="form-control" id="content" name="content" rows="3" readonly>{{content}}</textarea>
+        </div>
+    </form>
+{{/article}}
+
+<h3> <a href="/articles/{{article.id}}/edit">수정</a> <a href="/articles/{{article.id}}/delete">삭제</a> </h3>
+
+{{>layouts/footer}}
