@@ -3,6 +3,7 @@ package com.dongyang.wooyeong01.api;
 import com.dongyang.wooyeong01.dto.ArticleForm;
 import com.dongyang.wooyeong01.entity.Article;
 import com.dongyang.wooyeong01.repository.ArticleRepository;
+import com.dongyang.wooyeong01.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,40 +14,30 @@ import java.util.List;
 @RestController
 public class ArticleApiController {
     @Autowired
-    private ArticleRepository articleRepository;
+    private ArticleService articleService;
 
     @PostMapping("/api/articles")
     public Article Create(@RequestBody ArticleForm dto){
-        return articleRepository.save(dto.toEntity());
+        return articleService.Create(dto);
     }
 
     @GetMapping("/api/articles")
     public List<Article> index(){
-        return (List<Article>) articleRepository.findAll();
+        return articleService.index();
     }
 
     @GetMapping("/api/articles/{id}")
     public Article show(@PathVariable Long id){
-        return articleRepository.findById(id).orElse(null);
+        return articleService.show(id);
     }
 
     @DeleteMapping("/api/articles/{id}")
     public ResponseEntity<Article> delete(@PathVariable Long id){
-        Article target = articleRepository.findById(id).orElse(null);
-        if(target == null){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
-        articleRepository.delete(target);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return articleService.delete(id);
     }
 
    @PatchMapping("/api/articles/{id}")
     public ResponseEntity<Article> update(@PathVariable Long id, @RequestBody ArticleForm dto){
-        Article article = dto.toEntity();
-        Article target = articleRepository.findById(id).orElse(null);
-        if(target == null || id != article.getId()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
-        articleRepository.save(article);
+        return articleService.update(id, dto);
    }
 }
