@@ -2,7 +2,6 @@ package com.dongyang.wooyeong01.api;
 
 import com.dongyang.wooyeong01.dto.ArticleForm;
 import com.dongyang.wooyeong01.entity.Article;
-import com.dongyang.wooyeong01.repository.ArticleRepository;
 import com.dongyang.wooyeong01.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,11 +32,25 @@ public class ArticleApiController {
 
     @DeleteMapping("/api/articles/{id}")
     public ResponseEntity<Article> delete(@PathVariable Long id){
-        return articleService.delete(id);
+        Article deleted = articleService.delete(id);
+        return (deleted != null) ?
+            ResponseEntity.status(HttpStatus.NO_CONTENT).build() :
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
    @PatchMapping("/api/articles/{id}")
     public ResponseEntity<Article> update(@PathVariable Long id, @RequestBody ArticleForm dto){
-        return articleService.update(id, dto);
+       Article updated = articleService.update(id, dto);
+        return (updated != null) ?
+               ResponseEntity.status(HttpStatus.OK).build() :
+               ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+   }
+
+   @PostMapping("/api/transaction-test")
+    public ResponseEntity<List<Article>> testTransaction(@RequestBody List<ArticleForm> dtos){
+        List<Article> createdList = articleService.createArticles(dtos);
+        return (createdList != null) ?
+                ResponseEntity.status(HttpStatus.OK).body(createdList) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
    }
 }
